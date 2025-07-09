@@ -14,13 +14,10 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APP_ID,
 };
 
-// --- LÍNEA DE DEPURACIÓN ---
-// Esto nos mostrará en la consola del navegador exactamente qué valores se están leyendo.
+
 console.log("DEBUG: Configuración de Firebase cargada:", firebaseConfig);
 
-// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
-// Exportar instancias
 export const db = getFirestore(app);
 export const auth = getAuth(app);
