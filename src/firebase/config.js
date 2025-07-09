@@ -1,0 +1,26 @@
+// src/firebase/config.js -- VERSIÓN DE DEPURACIÓN
+
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+
+// Tu configuración de Firebase desde las variables de entorno
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+};
+
+// --- LÍNEA DE DEPURACIÓN ---
+// Esto nos mostrará en la consola del navegador exactamente qué valores se están leyendo.
+console.log("DEBUG: Configuración de Firebase cargada:", firebaseConfig);
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+
+// Exportar instancias
+export const db = getFirestore(app);
+export const auth = getAuth(app);

@@ -1,0 +1,211 @@
+/* Variables CSS para el modo oscuro */
+body.dark-mode {
+    /* Colores de fondo */
+    --bs-body-bg: #212529;
+    /* Fondo oscuro principal (casi negro) */
+    --bs-body-color: #f8f9fa;
+    /* Color de texto claro (casi blanco) */
+    --bs-heading-color: #f8f9fa;
+    /* Color de encabezados */
+    --bs-link-color: #8ab4f8;
+    /* Color de enlaces */
+    --bs-link-hover-color: #a6c8ff;
+
+    /* Colores de componentes (tarjetas, inputs, etc.) */
+    --bs-card-bg: #1a1a1a;
+    /* Fondo de tarjetas oscuro (gris carbón) */
+    --bs-card-color: #f8f9fa;
+    /* Texto de tarjetas claro */
+    --bs-border-color: #333333;
+    /* Bordes más oscuros pero visibles */
+    --bs-gray-200: #2a2a2a;
+    /* Gris oscuro para fondos sutiles/diferenciados */
+    --bs-gray-300: #3a3a3a;
+    /* Gris un poco más oscuro para hover/activos */
+    --bs-gray-400: #ababab;
+    /* Gris medio para texto muted legible */
+    --bs-gray-500: #cccccc;
+    /* Gris claro para placeholders/iconos sutiles */
+    --bs-light: #2a2a2a;
+    /* Para elementos 'light' de Bootstrap */
+    --bs-secondary-bg-subtle: #252525;
+    /* Fondo sutil para elementos como el día actual */
+
+    /* Inputs */
+    --bs-form-control-bg: #333333;
+    --bs-form-control-color: #f8f9fa;
+    --bs-form-control-border-color: #555555;
+    --bs-form-control-placeholder-color: #888888;
+
+    /* Alertas */
+    --bs-alert-bg: var(--bs-card-bg);
+    --bs-alert-color: var(--bs-card-color);
+    --bs-alert-border-color: var(--bs-border-color);
+    --bs-alert-color-primary: #8ab4f8;
+    --bs-alert-bg-light: var(--bs-card-bg);
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+body.dark-mode .card-title,
+body.dark-mode .card-body,
+body.dark-mode .list-group-item,
+body.dark-mode .dropdown-menu .dropdown-item,
+body.dark-mode .dropdown-header,
+body.dark-mode .form-label {
+    color: var(--bs-body-color) !important;
+}
+
+body.dark-mode .text-muted {
+    color: var(--bs-body-color) !important;
+}
+
+body.dark-mode .text-muted strong {
+    color: var(--bs-body-color) !important;
+}
+.card,
+.list-group-item,
+.dropdown-menu,
+.rbc-calendar {
+    border-color: var(--bs-border-color) !important;
+}
+
+.card,
+.list-group-item {
+    background-color: var(--bs-card-bg) !important;
+}
+
+.dropdown-menu .dropdown-item {
+    border-color: var(--bs-border-color) !important;
+}
+
+body.dark-mode .dropdown-menu .dropdown-item:hover {
+    background-color: var(--bs-gray-200) !important;
+}
+
+body.dark-mode .dropdown-menu .dropdown-item.unread {
+    background-color: var(--bs-secondary-bg-subtle) !important;
+}
+
+body.dark-mode .dropdown-menu .dropdown-item.unread .text-muted {
+    color: var(--bs-gray-400) !important;
+}
+
+body.dark-mode .dropdown-header {
+    background-color: var(--bs-light) !important;
+}
+
+body.dark-mode .spinner-border.text-primary {
+    color: var(--bs-link-color) !important;
+}
+
+body.dark-mode .btn-danger {
+    background-color: #e54756 !important;
+    border-color: #e54756 !important;
+    color: white !important;
+}
+
+body.dark-mode .btn-danger:hover {
+    background-color: #f05a68 !important;
+    border-color: #f05a68 !important;
+}
+
+.rbc-calendar {
+    background-color: var(--bs-card-bg);
+    color: var(--bs-card-color);
+}
+
+.rbc-header {
+    color: var(--bs-body-color) !important;
+    border-bottom-color: var(--bs-border-color) !important;
+    border-right-color: var(--bs-border-color) !important;
+}
+
+.rbc-day-bg {
+    background-color: var(--bs-body-bg) !important;
+    border-right-color: var(--bs-border-color);
+    border-bottom-color: var(--bs-border-color);
+}
+
+.rbc-today {
+    background-color: var(--bs-secondary-bg-subtle) !important;
+}
+
+.rbc-off-range-bg {
+    background-color: var(--bs-gray-200) !important;
+}
+
+.rbc-date-cell {
+    color: var(--bs-body-color) !important;
+}
+
+.rbc-off-range-bg .rbc-date-cell {
+    color: var(--bs-gray-400) !important;
+}
+
+.rbc-toolbar button {
+    background-color: var(--bs-gray-200) !important;
+    color: var(--bs-body-color) !important;
+    border-color: var(--bs-border-color) !important;
+}
+
+.rbc-toolbar button:hover {
+    background-color: var(--bs-gray-300) !important;
+    color: var(--bs-body-color) !important;
+}
+
+.rbc-toolbar button.rbc-active {
+    background-color: var(--bs-primary) !important;
+    color: white !important;
+}
+
+.rbc-toolbar-label {
+    color: var(--bs-heading-color) !important;
+}
+
+
+.rbc-event-content {
+    color: inherit !important;
+}
+
+body.dark-mode .rbc-agenda-table tbody tr {
+    background-color: var(--bs-card-bg);
+}
+
+body.dark-mode .rbc-agenda-table tbody tr:nth-child(odd) {
+    background-color: var(--bs-body-bg);
+}
+
+body.dark-mode .rbc-agenda-table tbody tr:nth-child(even) {
+    background-color: var(--bs-gray-200);
+}
+
+body.dark-mode .rbc-agenda-table td {
+    color: var(--bs-body-color) !important;
+
+}
+
+body.dark-mode .rbc-agenda-table th,
+body.dark-mode .rbc-agenda-table td {
+    border-right-color: var(--bs-border-color) !important;
+    border-bottom-color: var(--bs-border-color) !important;
+}
+
+body.dark-mode .rbc-agenda-table th {
+    color: var(--bs-heading-color) !important;
+    background-color: var(--bs-light) !important;
+}
+
+
+body.dark-mode .rbc-agenda-time-cell {
+    border-left-color: var(--bs-border-color) !important;
+}
+
+body.dark-mode .auth-container {
+    background-color: var(--bs-body-bg) !important;
+}
+
+body.dark-mode .auth-card {
+    background-color: var(--bs-card-bg) !important;
+    border-color: var(--bs-border-color) !important;
+    color: var(--bs-card-color) !important;
+}

@@ -1,0 +1,11 @@
+.card-title {
+    color: #333;
+}
+
+.card-body {
+    border: 1px solid #bebebe;
+}
+
+.turno-card .badge {
+    transition: background-color 0.3s ease-in-out;
+}

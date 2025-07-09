@@ -1,0 +1,88 @@
+.dropdown-menu {
+    width: 340px;
+    max-height: 450px;
+    padding: 0;
+    overflow: hidden;
+    background-color: #fff;
+    color: #212529;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+}
+
+/* Contenedor de la lista para el scroll */
+.notifications-list {
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+/* Estilos para cada item de la notificación */
+.dropdown-menu .dropdown-item {
+    white-space: normal;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease-in-out;
+    color: #212529;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-menu li:last-child .dropdown-item {
+    border-bottom: none;
+}
+
+/* Estilos para las notificaciones no leídas (unread) */
+.dropdown-item.unread {
+    background-color: #e9f5ff;
+    font-weight: bold;
+}
+
+.dropdown-item.unread .text-muted {
+    font-weight: normal;
+}
+
+/* El texto principal y secundario dentro de los ítems */
+.dropdown-item p {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    color: #212529;
+}
+
+.dropdown-item small.text-muted {
+    font-size: 0.8rem;
+    color: #6c757d !important;
+}
+
+/* Encabezado del dropdown */
+.dropdown-header {
+    font-weight: bold;
+    background-color: #f8f9fa;
+    padding: 0.75rem 1.25rem;
+    color: #212529;
+}
+
+/* Mensaje "No tienes notificaciones." */
+.dropdown-item-text.text-muted.text-center {
+    padding: 1rem;
+    color: #6c757d !important;
+}
+
+/* Estilos para el botón de la campana en el Navbar */
+.btn-link.nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s ease;
+}
+
+.btn-link.nav-link:hover {
+    color: #fff;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: block;
+}
