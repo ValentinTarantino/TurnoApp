@@ -78,10 +78,6 @@ body.dark-mode .text-muted strong {
     border-color: var(--bs-border-color) !important;
 }
 
-body.dark-mode .dropdown-menu .dropdown-item:hover {
-    background-color: var(--bs-gray-200) !important;
-}
-
 body.dark-mode .dropdown-menu .dropdown-item.unread {
     background-color: var(--bs-secondary-bg-subtle) !important;
 }
