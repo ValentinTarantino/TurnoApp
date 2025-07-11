@@ -6,6 +6,10 @@
 
 TurnosApp es una aplicación web moderna diseñada para facilitar la gestión de turnos para profesionales y sus clientes. Construida con React, ofrece una interfaz intuitiva y responsiva que permite a los profesionales organizar su agenda, y a los clientes solicitar y gestionar sus propios turnos.
 
+## Modo Profesional
+
+[**CLICKEA ACA**](https://drive.google.com/file/d/1QLaHC4JMPIFAcedvwYeP3HmuVizia46w/view?usp=sharing)
+
 ### Características Clave:
 
 *   **Autenticación de Usuarios:**  Inicio de sesión seguro a través de Google Authentication.
@@ -39,6 +43,10 @@ TurnosApp es una aplicación web moderna diseñada para facilitar la gestión de
 ## Project Description
 
 TurnosApp is a modern web application designed to facilitate appointment management for professionals and their clients. Built with React, it offers an intuitive and responsive interface that allows professionals to organize their schedule, and clients to request and manage their own appointments.
+
+## Professional Mode
+
+[**CLICK HERE**](https://drive.google.com/file/d/1QLaHC4JMPIFAcedvwYeP3HmuVizia46w/view?usp=sharing)
 
 ### Key Features:
 
