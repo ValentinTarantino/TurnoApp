@@ -61,8 +61,7 @@ TurnosApp is a modern web application designed to facilitate appointment managem
 *   `React`: The primary library for building the user interface.
 *   `Vite`: Fast build tool for React projects.
 *   `Firebase`: Backend-as-a-service platform for:
-    *   `Authentication`: User and session management (Google Sign-In).
-    *   `Cloud Firestore`: Real-time NoSQL database for storing appointments, users, and notifications.
+*   `Authentication`: User and session management (Google Sign-In).
 *   `React Router DOM`: For navigation and routing within the application.
 *   `Bootstrap`: CSS framework for responsive design and pre-styled UI components.
 *   `React Toastify`: For customizable "toast" notifications.

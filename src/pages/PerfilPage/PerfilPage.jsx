@@ -12,7 +12,7 @@ const PerfilPage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [userData, setUserData] = useState(null);
     const [historialTurnos, setHistorialTurnos] = useState([]);
-    const [loadingProfile, setLoadingProfile] = useState(true); // Estado de carga específico del perfil
+    const [loadingProfile, setLoadingProfile] = useState(true); 
 
     // Efecto para buscar todos los datos necesarios cuando el usuario cambia
     useEffect(() => {
