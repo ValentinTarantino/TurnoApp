@@ -31,7 +31,7 @@ const HomePage = () => {
 
     const crearNotificacion = async (userId, mensaje) => {
         try {
-            const response = await fetch('http://localhost:5000/api/notifications', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notifications`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_id: userId, mensaje })
@@ -47,7 +47,7 @@ const HomePage = () => {
         if (!currentUser) return;
         setLoading(true);
         try {
-            let url = `http://localhost:5000/api/turnos`;
+            let url = `${import.meta.env.VITE_API_BASE_URL}/api/turnos`;
             const params = new URLSearchParams();
 
             if (userRole === 'profesional' || userRole === 'administrador') {
@@ -79,7 +79,7 @@ const HomePage = () => {
 
         const fetchClientes = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/users/clients');
+                const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/clients`);
                 if (!response.ok) throw new Error('Error al cargar clientes desde el backend');
                 const data = await response.json();
                 setClientes(data);
@@ -97,7 +97,7 @@ const HomePage = () => {
 
     const agregarTurno = async (nuevoTurnoData) => {
         try {
-            const response = await fetch('http://localhost:5000/api/turnos', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/turnos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -133,7 +133,7 @@ const HomePage = () => {
             estado: 'solicitado',
         };
         try {
-            const response = await fetch('http://localhost:5000/api/turnos', {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/turnos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(nuevaSolicitud)
@@ -151,7 +151,7 @@ const HomePage = () => {
 
     const actualizarEstadoTurno = async (idTurno, nuevoEstado) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/turnos/${idTurno}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/turnos/${idTurno}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ estado: nuevoEstado })
@@ -180,7 +180,7 @@ const HomePage = () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:5000/api/turnos/${idToDelete}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/turnos/${idToDelete}`, {
                 method: 'DELETE',
             });
             if (!response.ok) throw new Error('Error al eliminar turno en el backend');
@@ -219,7 +219,7 @@ const HomePage = () => {
     const handleConfirmarTurno = async ({ fecha, hora, duracion }) => {
         if (!turnoParaAsignar) return;
         try {
-            const response = await fetch(`http://localhost:5000/api/turnos/${turnoParaAsignar.id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/turnos/${turnoParaAsignar.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ fecha, hora, duracion, estado: 'Confirmado' })

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import './FormularioTurno.css';
 
 function validarTurno({ pacienteId, hora, motivo, duracion, clientes }) {
     if (!pacienteId || !hora || !motivo || !duracion) {

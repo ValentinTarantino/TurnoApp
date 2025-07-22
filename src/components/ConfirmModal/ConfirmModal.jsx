@@ -1,4 +1,3 @@
-import './ConfirmModal.css';
 import PropTypes from 'prop-types';
 
 const ConfirmModal = ({ show, onHide, onConfirm, title, body }) => {
@@ -24,7 +23,6 @@ const ConfirmModal = ({ show, onHide, onConfirm, title, body }) => {
                             <button type="button" className="btn btn-secondary" onClick={onHide}>
                                 Cancelar
                             </button>
-                            {/* Este botón simplemente llama a la función onConfirm que recibe por props */}
                             <button type="button" className="btn btn-danger" onClick={onConfirm}>
                                 Confirmar Eliminación
                             </button>

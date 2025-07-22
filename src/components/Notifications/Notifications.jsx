@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/useAuth';
 import './Notifications.css';
 import moment from 'moment'; 
@@ -14,7 +14,7 @@ const Notifications = () => {
             return;
         }
         try {
-            const response = await fetch(`http://localhost:5000/api/notifications/${currentUser.uid}`);
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notifications/${currentUser.uid}`);
             if (!response.ok) throw new Error('Error al cargar notificaciones desde el backend');
             const data = await response.json();
             setNotifications(data);
@@ -37,7 +37,7 @@ const Notifications = () => {
             const unreadNotis = notifications.filter(n => !n.leida);
             for (const noti of unreadNotis) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/notifications/${noti.id}/read`, {
+                    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notifications/${noti.id}/read`, {
                         method: 'PUT',
                     });
                     if (!response.ok) throw new Error('Error al marcar como leída en backend');

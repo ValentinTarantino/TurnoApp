@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { auth } from '../firebase/config'; 
+import { auth } from '../firebase/config';
 import { onAuthStateChanged } from 'firebase/auth';
 import Loader from '../components/Loader/Loader';
 import { toast } from 'react-toastify';
@@ -24,17 +24,17 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/users/${user.uid}`);
+                    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/${user.uid}`);
                     if (!response.ok) {
                         if (response.status === 404) {
-                            const createUserResponse = await fetch('http://localhost:5000/api/users', {
+                            const createUserResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
                                     id: user.uid,
                                     email: user.email,
                                     nombre: user.displayName,
-                                    role: 'cliente' 
+                                    role: 'cliente'
                                 })
                             });
                             const newUser = await createUserResponse.json();
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
                 } catch (error) {
                     console.error("Error al obtener o crear usuario en el backend:", error);
                     toast.error("Error al cargar datos de usuario.");
-                    setCurrentUser(null); 
+                    setCurrentUser(null);
                     setUserRole(null);
                 }
             } else {
