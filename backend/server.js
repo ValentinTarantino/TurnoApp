@@ -15,9 +15,9 @@ app.use((req, res, next) => {
 });
 
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL, 
+    connectionString: process.env.DATABASE_URL,
     ssl: {
-        rejectUnauthorized: false 
+        rejectUnauthorized: false
     }
 });
 
@@ -34,7 +34,7 @@ app.get('/api/users/clients', async (req, res) => {
         const result = await pool.query('SELECT id, email, nombre, role FROM users WHERE role = $1', ['cliente']);
         res.json(result.rows);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al obtener clientes:', err.message, err.stack);
+        console.error('Error al obtener clientes:', err.message);
         res.status(500).json({ error: 'Error interno del servidor al obtener clientes' });
     }
 });
@@ -48,7 +48,7 @@ app.get('/api/users/:id', async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al obtener usuario por ID:', err.message, err.stack);
+        console.error('Error al obtener usuario por ID:', err.message);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -62,7 +62,7 @@ app.post('/api/users', async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al crear usuario:', err.message, err.stack);
+        console.error('Error al crear usuario:', err.message);
         if (err.code === '23505') {
             return res.status(409).json({ error: 'El usuario con este ID o email ya existe' });
         }
@@ -83,7 +83,7 @@ app.put('/api/users/:id', async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al actualizar usuario:', err.message, err.stack);
+        console.error('Error al actualizar usuario:', err.message);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -93,7 +93,7 @@ app.get('/api/users', async (req, res) => {
         const result = await pool.query('SELECT * FROM users');
         res.json(result.rows);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al obtener todos los usuarios:', err.message, err.stack);
+        console.error('Error al obtener todos los usuarios:', err.message);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -123,7 +123,7 @@ app.get('/api/turnos', async (req, res) => {
         const result = await pool.query(queryText, queryParams);
         res.json(result.rows);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al obtener turnos:', err.message, err.stack);
+        console.error('Error al obtener turnos:', err.message);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -137,7 +137,7 @@ app.post('/api/turnos', async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al crear turno:', err.message, err.stack);
+        console.error('Error al crear turno:', err.message);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -155,7 +155,7 @@ app.put('/api/turnos/:id', async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al actualizar turno:', err.message, err.stack);
+        console.error('Error al actualizar turno:', err.message);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -169,16 +169,14 @@ app.delete('/api/turnos/:id', async (req, res) => {
         }
         res.status(200).json({ message: 'Turno eliminado exitosamente', id: result.rows[0].id });
     } catch (err) {
-        console.error('[SERVER ERROR] Error al eliminar turno:', err.message, err.stack);
+        console.error('Error al eliminar turno:', err.message);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
-// ENDPOINTS PARA NOTIFICACIONES
 app.post('/api/notifications', async (req, res) => {
     const { user_id, mensaje } = req.body;
     if (!user_id || !mensaje) {
-        console.error('[SERVER ERROR] Notificación: user_id o mensaje missing', req.body);
         return res.status(400).json({ error: 'Faltan user_id o mensaje para la notificación' });
     }
     try {
@@ -188,7 +186,7 @@ app.post('/api/notifications', async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al crear notificación:', err.message, err.stack, 'SQL State:', err.code);
+        console.error('Error al crear notificación:', err.message, err.stack, 'SQL State:', err.code);
         res.status(500).json({ error: 'Error interno del servidor al crear notificación' });
     }
 });
@@ -202,7 +200,7 @@ app.get('/api/notifications/:userId', async (req, res) => {
         );
         res.json(result.rows);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al obtener notificaciones:', err.message, err.stack);
+        console.error('Error al obtener notificaciones:', err.message);
         res.status(500).json({ error: 'Error interno del servidor al obtener notificaciones' });
     }
 });
@@ -219,7 +217,7 @@ app.put('/api/notifications/:id/read', async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (err) {
-        console.error('[SERVER ERROR] Error al marcar notificación como leída:', err.message, err.stack);
+        console.error('Error al marcar notificación como leída:', err.message);
         res.status(500).json({ error: 'Error interno del servidor al marcar como leída' });
     }
 });
