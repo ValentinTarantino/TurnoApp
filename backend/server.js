@@ -15,11 +15,10 @@ app.use((req, res, next) => {
 });
 
 const pool = new Pool({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_DATABASE,
+    connectionString: process.env.DATABASE_URL, 
+    ssl: {
+        rejectUnauthorized: false 
+    }
 });
 
 pool.connect((err, client, release) => {
@@ -184,7 +183,7 @@ app.post('/api/notifications', async (req, res) => {
     }
     try {
         const result = await pool.query(
-            'INSERT INTO notifications (user_id, mensaje, leida, fecha) VALUES ($1, $2, FALSE, NOW()) RETURNING *', 
+            'INSERT INTO notifications (user_id, mensaje, leida, fecha) VALUES ($1, $2, FALSE, NOW()) RETURNING *',
             [user_id, mensaje]
         );
         res.status(201).json(result.rows[0]);
