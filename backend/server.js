@@ -30,7 +30,6 @@ pool.connect((err, client, release) => {
     release();
 });
 
-// ENDPOINTS DE USUARIOS
 app.get('/api/users/clients', async (req, res) => {
     try {
         const result = await pool.query('SELECT id, email, nombre, role FROM users WHERE role = $1', ['cliente']);
@@ -100,7 +99,6 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-// ENDPOINTS PARA TURNOS
 app.get('/api/turnos', async (req, res) => {
     const { paciente_id, estado } = req.query;
     let queryText = 'SELECT * FROM turnos';
@@ -180,19 +178,17 @@ app.delete('/api/turnos/:id', async (req, res) => {
 // ENDPOINTS PARA NOTIFICACIONES
 app.post('/api/notifications', async (req, res) => {
     const { user_id, mensaje } = req.body;
-    // --- AÑADIR VALIDACIÓN BÁSICA ---
     if (!user_id || !mensaje) {
         console.error('[SERVER ERROR] Notificación: user_id o mensaje missing', req.body);
         return res.status(400).json({ error: 'Faltan user_id o mensaje para la notificación' });
     }
     try {
         const result = await pool.query(
-            'INSERT INTO notifications (user_id, mensaje, leida, fecha) VALUES ($1, $2, FALSE, NOW()) RETURNING *', // Incluir 'leida' explícitamente
+            'INSERT INTO notifications (user_id, mensaje, leida, fecha) VALUES ($1, $2, FALSE, NOW()) RETURNING *', 
             [user_id, mensaje]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
-        // Captura y log del error de PostgreSQL
         console.error('[SERVER ERROR] Error al crear notificación:', err.message, err.stack, 'SQL State:', err.code);
         res.status(500).json({ error: 'Error interno del servidor al crear notificación' });
     }
