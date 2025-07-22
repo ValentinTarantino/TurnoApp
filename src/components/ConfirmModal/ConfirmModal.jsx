@@ -1,4 +1,5 @@
 import './ConfirmModal.css';
+import PropTypes from 'prop-types';
 
 const ConfirmModal = ({ show, onHide, onConfirm, title, body }) => {
     if (!show) {
@@ -33,6 +34,14 @@ const ConfirmModal = ({ show, onHide, onConfirm, title, body }) => {
             </div>
         </>
     );
+};
+
+ConfirmModal.propTypes = {
+    show: PropTypes.bool.isRequired,
+    onHide: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired,
 };
 
 export default ConfirmModal;

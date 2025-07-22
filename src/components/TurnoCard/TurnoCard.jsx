@@ -1,7 +1,8 @@
 import './TurnoCard.css';
+import moment from 'moment';
 
 const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, onAsignarHora, onClienteCancela }) => {
-    const { id, pacienteNombre, fecha, hora, motivo, estado, duracion } = turno; 
+    const { id, paciente_nombre, fecha, hora, motivo, estado, duracion } = turno;
 
     const getBadgeClass = (estado) => {
         switch (estado.toLowerCase()) {
@@ -17,19 +18,19 @@ const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, on
                 return 'bg-secondary';
         }
     };
-
     return (
         <div className="card shadow-sm mb-3 turno-card">
             <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
-                    <h5 className="card-title mb-0">{pacienteNombre}</h5>
+                    <h5 className="card-title mb-0">{paciente_nombre}</h5>
                     <span className={`badge ${getBadgeClass(estado)}`}>{estado}</span>
                 </div>
                 <p className="card-text text-muted mt-2">
-                    <strong>Fecha:</strong> {fecha ? new Date(fecha + 'T00:00:00').toLocaleDateString() : 'Por confirmar'}
+                    <strong>Fecha:</strong> 
+                    {fecha ? moment(fecha).format('DD/MM/YYYY') : 'Por confirmar'}
                     <br />
                     <strong>Hora:</strong> {hora}
-                    {duracion && ( 
+                    {duracion && (
                         <>
                             <br />
                             <strong>Duración:</strong> {duracion} minutos
@@ -39,10 +40,6 @@ const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, on
                 <p className="card-text">
                     <strong>Motivo:</strong> {motivo}
                 </p>
-
-                {/* --- LÓGICA DE BOTONES CONDICIONAL POR ROL --- */}
-
-                {/* Botones para PROFESIONAL / ADMINISTRADOR */}
                 {(userRole === 'profesional' || userRole === 'administrador') && (
                     <div className="d-flex justify-content-end gap-2 mt-3">
                         {estado.toLowerCase() === 'solicitado' && (
@@ -82,8 +79,6 @@ const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, on
                         )}
                     </div>
                 )}
-
-                {/* Botón "Cancelar" para CLIENTE */}
                 {userRole === 'cliente' && estado.toLowerCase() !== 'cancelado' && estado.toLowerCase() !== 'solicitado' && (
                     <div className="d-flex justify-content-end gap-2 mt-3">
                         <button
@@ -95,7 +90,7 @@ const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, on
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 };
 

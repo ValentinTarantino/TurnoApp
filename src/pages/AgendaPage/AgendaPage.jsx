@@ -1,55 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import 'moment/dist/locale/es';
-
-import './AgendaPage.css';
-
+import moment from 'moment'; 
+import 'moment/dist/locale/es'; 
+import './AgendaPage.css'; 
 import { useAuth } from '../../context/useAuth';
 import Loader from '../../components/Loader/Loader';
-import { db } from '../../firebase/config';
-import { collection, query, where, getDocs } from 'firebase/firestore';
 import { toast } from 'react-toastify';
-
-moment.locale('es');
-const localizer = momentLocalizer(moment);
-
-const messages_es = {
-    allDay: 'Todo el día',
-    previous: 'Anterior',
-    next: 'Siguiente',
-    today: 'Hoy',
-    month: 'Mes',
-    week: 'Semana',
-    day: 'Día',
-    agenda: 'Agenda',
-    date: 'Fecha',
-    time: 'Hora',
-    event: 'Evento',
-    noEventsInRange: 'No hay eventos en este rango.',
-    showMore: total => `+ ${total} más`,
-};
-
-const CustomAgendaEvent = ({ event: actualEvent }) => (
-    <span>{actualEvent.resource.pacienteNombre} ({actualEvent.resource.motivo})</span>
-);
-
-const CustomAgendaDate = ({ event: actualEvent }) => (
-    <span>{moment(actualEvent.start).format('ddd, DD MMM')}</span>
-);
-
-const CustomAgendaTime = ({ event: actualEvent }) => (
-    <span>{moment(actualEvent.start).format('HH:mm')} - {moment(actualEvent.end).format('HH:mm')}</span>
-);
-
 
 const AgendaPage = () => {
     const { currentUser, userRole } = useAuth();
-    const [events, setEvents] = useState([]);
+    const [turnos, setTurnos] = useState([]); 
     const [loading, setLoading] = useState(true);
-    const [currentDate, setCurrentDate] = useState(new Date());
-    const [currentView, setCurrentView] = useState('month'); 
 
     const isProfesionalOrAdmin = userRole === 'profesional' || userRole === 'administrador';
 
@@ -59,47 +19,36 @@ const AgendaPage = () => {
             return;
         }
 
-        const fetchTurnosForCalendar = async () => {
+        const fetchTurnosForAgenda = async () => {
             setLoading(true);
             try {
-                const turnosCollectionRef = collection(db, 'turnos');
-                const q = query(turnosCollectionRef);
-                const querySnapshot = await getDocs(q);
-
-                const loadedTurnos = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-                const calendarEvents = loadedTurnos
-                    .filter(turno => turno.fecha && turno.hora && turno.estado !== 'solicitado' && turno.estado !== 'cancelado')
-                    .map(turno => {
-                        const startDateTime = moment(`${turno.fecha} ${turno.hora}`, 'YYYY-MM-DD HH:mm').toDate();
-                        const endDateTime = moment(startDateTime).add(turno.duracion || 30, 'minutes').toDate();
-
-                        let eventClass = '';
-                        if (turno.estado === 'Confirmado') eventClass = 'event-confirmed';
-                        else if (turno.estado === 'Pendiente') eventClass = 'event-pending';
-
-                        return {
-                            id: turno.id,
-                            title: `${moment(startDateTime).format('DD/MM HH:mm')} - ${turno.pacienteNombre} (${turno.motivo})`,
-                            start: startDateTime,
-                            end: endDateTime,
-                            allDay: false,
-                            resource: turno,
-                            className: eventClass,
-                        };
+                const response = await fetch('http://localhost:5000/api/turnos');
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error("AgendaPage: Error HTTP al cargar turnos:", response.status, errorText);
+                    throw new Error(`Error al cargar turnos: ${response.status} ${response.statusText}`);
+                }
+                const loadedTurnos = await response.json();
+                const agendaTurnos = loadedTurnos
+                    .filter(turno => turno.fecha && turno.hora && turno.estado !== 'solicitado' && turno.estado !== 'Cancelado')
+                    .sort((a, b) => {
+                        const dateA = moment(`${a.fecha} ${a.hora}`, 'YYYY-MM-DD HH:mm');
+                        const dateB = moment(`${b.fecha} ${b.hora}`, 'YYYY-MM-DD HH:mm');
+                        return dateA.diff(dateB);
                     });
-                setEvents(calendarEvents);
+
+                setTurnos(agendaTurnos);
 
             } catch (error) {
-                console.error("Error al cargar los turnos para el calendario:", error);
+                console.error("AgendaPage: Error general al cargar la agenda:", error);
                 toast.error("Error al cargar la agenda.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchTurnosForCalendar();
-    }, [currentUser, isProfesionalOrAdmin]);
+        fetchTurnosForAgenda();
+    }, [currentUser, isProfesionalOrAdmin]); 
 
     if (loading) {
         return <Loader />;
@@ -112,33 +61,50 @@ const AgendaPage = () => {
             </div>
         );
     }
+    const capitalize = (str) => {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
 
     return (
         <div className="container mt-4">
             <h2>Mi Agenda Profesional</h2>
-            <p>Aquí puedes ver tus turnos agendados en formato de calendario.</p>
-            <div style={{ height: 700, backgroundColor: 'transparent' }}>
-                <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{ height: '100%' }}
-                    messages={messages_es}
-                    date={currentDate}
-                    onNavigate={newDate => setCurrentDate(newDate)}
-                    view={currentView}
-                    onView={newView => setCurrentView(newView)}
-                    views={['month']}
-                    culture="es"
-                    components={{
-                        agenda: {
-                            event: CustomAgendaEvent,
-                            date: CustomAgendaDate,
-                            time: CustomAgendaTime,
-                        },
-                    }}
-                />
+            <p>Aquí puedes ver tus turnos agendados en formato de lista.</p>
+
+            <div className="table-responsive">
+                <table className="table table-striped table-hover mt-4">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Duración</th>
+                            <th>Paciente</th>
+                            <th>Motivo</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {turnos.length > 0 ? (
+                            turnos.map(turno => (
+                                <tr key={turno.id}>
+                                    <td>{moment(turno.fecha).format('DD/MM/YYYY')}</td>
+                                    <td>{turno.hora}</td>
+                                    <td>{turno.duracion || 'N/A'} min</td>
+                                    <td>{turno.paciente_nombre}</td>
+                                    <td>{turno.motivo}</td>
+                                    <td><span className={`badge ${turno.estado === 'Confirmado' ? 'bg-success' :
+                                            turno.estado === 'Pendiente' ? 'bg-warning text-dark' :
+                                                turno.estado === 'Cancelado' ? 'bg-danger' : 'bg-secondary'
+                                        }`}>{capitalize(turno.estado)}</span></td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" className="text-center text-muted">No hay turnos agendados para mostrar.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

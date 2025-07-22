@@ -1,42 +1,50 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/useAuth';
-import { db } from '../../firebase/config';
-import { collection, query, where, onSnapshot, orderBy, doc, updateDoc } from 'firebase/firestore';
 import './Notifications.css';
+import moment from 'moment'; 
 
 const Notifications = () => {
     const { currentUser } = useAuth();
     const [notifications, setNotifications] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
 
+    const fetchNotifications = async () => {
+        if (!currentUser) {
+            setNotifications([]);
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:5000/api/notifications/${currentUser.uid}`);
+            if (!response.ok) throw new Error('Error al cargar notificaciones desde el backend');
+            const data = await response.json();
+            setNotifications(data);
+        } catch (error) {
+            console.error("Error al cargar notificaciones:", error);
+        }
+    };
+
     useEffect(() => {
-        if (!currentUser) return;
-
-        const q = query(
-            collection(db, "notifications"),
-            where("userId", "==", currentUser.uid),
-            orderBy("fecha", "desc")
-        );
-
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const notis = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setNotifications(notis);
-        });
-
-        return () => unsubscribe();
+        fetchNotifications();
+        const intervalId = setInterval(fetchNotifications, 10000); 
+        return () => clearInterval(intervalId);
     }, [currentUser]);
 
     const handleToggle = async () => {
         const nextIsOpen = !isOpen;
         setIsOpen(nextIsOpen);
 
-        const unreadNotis = notifications.filter(n => !n.leida);
-        if (nextIsOpen && unreadNotis.length > 0) {
-            const updatePromises = unreadNotis.map(noti => {
-                const notiRef = doc(db, "notifications", noti.id);
-                return updateDoc(notiRef, { leida: true });
-            });
-            await Promise.all(updatePromises); 
+        if (nextIsOpen && notifications.filter(n => !n.leida).length > 0) {
+            const unreadNotis = notifications.filter(n => !n.leida);
+            for (const noti of unreadNotis) {
+                try {
+                    const response = await fetch(`http://localhost:5000/api/notifications/${noti.id}/read`, {
+                        method: 'PUT',
+                    });
+                    if (!response.ok) throw new Error('Error al marcar como leída en backend');
+                } catch (error) {
+                    console.error(`Error marcando notificación ${noti.id} como leída:`, error);
+                }
+            }
             setNotifications(prevNotis => prevNotis.map(noti => ({ ...noti, leida: true })));
         }
     };
@@ -63,7 +71,7 @@ const Notifications = () => {
                             <li key={noti.id}>
                                 <a className={`dropdown-item ${!noti.leida ? 'unread' : ''}`} href="#">
                                     <p className="mb-0">{noti.mensaje}</p>
-                                    <small className="text-muted">{new Date(noti.fecha.toDate()).toLocaleString()}</small>
+                                    <small className="text-muted">{moment(noti.fecha).toLocaleString()}</small>
                                 </a>
                             </li>
                         ))

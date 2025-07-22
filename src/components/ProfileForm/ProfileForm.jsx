@@ -1,4 +1,5 @@
 import  { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const ProfileForm = ({ user, onSave }) => {
     // Inicializamos el estado del formulario con los datos existentes del usuario
@@ -46,6 +47,11 @@ const ProfileForm = ({ user, onSave }) => {
             <button type="submit" className="btn btn-primary">Guardar Cambios</button>
         </form>
     );
+};
+
+ProfileForm.propTypes = {
+    user: PropTypes.object.isRequired,
+    onSave: PropTypes.func.isRequired,
 };
 
 export default ProfileForm;

@@ -1,283 +1,188 @@
+/* =====================
+    Variables Dark Mode
+   ===================== */
 body.dark-mode {
-    /* Colores de fondo */
     --bs-body-bg: #212529;
-    /* Fondo oscuro principal (casi negro) */
     --bs-body-color: #f8f9fa;
-    /* Color de texto claro (casi blanco) */
     --bs-heading-color: #f8f9fa;
-    /* Color de encabezados */
     --bs-link-color: #8ab4f8;
-    /* Color de enlaces */
     --bs-link-hover-color: #a6c8ff;
-
-    /* Colores de componentes (tarjetas, inputs, etc.) */
     --bs-card-bg: #1a1a1a;
-    /* Fondo de tarjetas oscuro (gris carbón) */
     --bs-card-color: #f8f9fa;
-    /* Texto de tarjetas claro */
     --bs-border-color: #333333;
-    /* Bordes más oscuros pero visibles */
     --bs-gray-200: #2a2a2a;
-    /* Gris oscuro para fondos sutiles/diferenciados */
     --bs-gray-300: #3a3a3a;
-    /* Gris un poco más oscuro para hover/activos */
     --bs-gray-400: #ababab;
-    /* Gris medio para texto muted legible */
     --bs-gray-500: #cccccc;
-    /* Gris claro para placeholders/iconos sutiles */
     --bs-light: #2a2a2a;
-    /* Para elementos 'light' de Bootstrap */
     --bs-secondary-bg-subtle: #252525;
-    /* Fondo sutil para elementos como el día actual */
-
-    /* Inputs */
     --bs-form-control-bg: #333333;
     --bs-form-control-color: #f8f9fa;
     --bs-form-control-border-color: #555555;
     --bs-form-control-placeholder-color: #888888;
-
-    /* Alertas */
     --bs-alert-bg: var(--bs-card-bg);
     --bs-alert-color: var(--bs-card-color);
     --bs-alert-border-color: var(--bs-border-color);
     --bs-alert-color-primary: #8ab4f8;
     --bs-alert-bg-light: var(--bs-card-bg);
-
-    /* Navbar Toggler Icon */
     --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-/* --- AJUSTES ESPECÍFICOS PARA MODO OSCURO (Componentes) --- */
-
-/* Ajustes generales para el texto dentro de tarjetas y elementos similares */
+/* =====================
+    Textos y Colores
+   ===================== */
+.text-muted,
+.text-muted strong,
+body.dark-mode .text-muted strong,
 body.dark-mode .card-title,
 body.dark-mode .card-body,
 body.dark-mode .list-group-item,
 body.dark-mode .dropdown-menu .dropdown-item,
-/* Asegurar que el texto del item del dropdown sea claro */
 body.dark-mode .dropdown-header,
 body.dark-mode .form-label {
     color: var(--bs-body-color) !important;
 }
 
-/* Ajustes para el texto muted (por ejemplo, en TurnoCard: Fecha, Hora, Duración, Motivo) */
-body.dark-mode .text-muted {
-    color: var(--bs-body-color) !important;
-    /* Forzar a ser blanco */
-}
-
-body.dark-mode .text-muted strong {
-    color: var(--bs-body-color) !important;
-}
-
-/* Bordes de las tarjetas y elementos con borde */
+/* =====================
+Tarjetas, listas y dropdowns
+   ===================== */
 .card,
 .list-group-item,
 .dropdown-menu,
 .rbc-calendar {
     border-color: var(--bs-border-color) !important;
 }
-
-/* Fondo de las tarjetas y elementos de lista */
 .card,
 .list-group-item {
     background-color: var(--bs-card-bg) !important;
 }
-
-/* Header del dropdown de notificaciones */
 body.dark-mode .dropdown-header {
     background-color: var(--bs-light) !important;
 }
-
-/* La línea divisoria del dropdown */
 body.dark-mode .dropdown-divider {
     border-top: 1px solid var(--bs-border-color) !important;
 }
 
-
-/* Ajuste para el color del spinner */
+/* =====================
+    Botones y Spinner
+   ===================== */
 body.dark-mode .spinner-border.text-primary {
     color: var(--bs-link-color) !important;
 }
-
-/* Ajuste del color del botón de Google para que sea visible en modo oscuro */
 body.dark-mode .btn-danger {
     background-color: #e54756 !important;
     border-color: #e54756 !important;
     color: white !important;
 }
-
 body.dark-mode .btn-danger:hover {
     background-color: #f05a68 !important;
     border-color: #f05a68 !important;
 }
 
-/* --- AJUSTES ESPECÍFICOS PARA EL CALENDARIO EN MODO OSCURO (rbc) --- */
-.rbc-calendar {
-    background-color: var(--bs-card-bg);
-    color: var(--bs-card-color);
-}
-
-/* Headers de los días (Lun, Mar, etc.) */
-.rbc-header {
-    color: var(--bs-body-color) !important;
-    border-bottom-color: var(--bs-border-color) !important;
-    border-right-color: var(--bs-border-color) !important;
-}
-
-/* Fondos de las celdas de los días (estándar) */
-.rbc-day-bg {
-    background-color: var(--bs-body-bg) !important;
-    border-right-color: var(--bs-border-color);
-    border-bottom-color: var(--bs-border-color);
-}
-
-/* Fondo para el día actual (Hoy) */
-.rbc-today {
-    background-color: var(--bs-secondary-bg-subtle) !important;
-}
-
-/* Días fuera del rango del mes actual (días grises en el calendario) */
-.rbc-off-range-bg {
-    background-color: var(--bs-gray-200) !important;
-}
-
-/* Color de los números de los días en las celdas */
-.rbc-date-cell {
-    color: var(--bs-body-color) !important;
-}
-
-.rbc-off-range-bg .rbc-date-cell {
-    color: var(--bs-gray-400) !important;
-}
-
-.rbc-toolbar button {
-    background-color: var(--bs-gray-200) !important;
-    color: var(--bs-body-color) !important;
-    border-color: var(--bs-border-color) !important;
-}
-
-.rbc-toolbar button:hover {
-    background-color: var(--bs-gray-300) !important;
-    color: var(--bs-body-color) !important;
-}
-
-.rbc-toolbar button.rbc-active {
-    background-color: var(--bs-primary) !important;
-    color: white !important;
-}
-
-.rbc-toolbar-label {
-    color: var(--bs-heading-color) !important;
-}
-
-.rbc-event-content {
-    color: inherit !important;
-}
-
-.rbc-calendar {
-    background-color: var(--bs-card-bg);
-    color: var(--bs-card-color);
-    border: 3px solid var(--bs-border-color) !important; 
-    border-radius: var(--bs-border-radius);
-}
-
-/* Bordes de los encabezados de los días (Lun, Mar, etc.) */
-.rbc-header {
-    border-right-color: var(--bs-border-color) !important;
-    border-bottom-color: var(--bs-border-color) !important;
-}
-
-/* Bordes de las celdas de los días (las líneas que dividen los días) */
-.rbc-day-bg {
-    border-right-color: var(--bs-form-control-bg) !important;
-    border-bottom-color: var(--bs-border-color) !important;
-}
-
-
-/* ESTILOS PARA LA VISTA AGENDA EN MODO OSCURO (TABLA) */
+/* =====================
+    Agenda (rbc-agenda)
+   ===================== */
 body.dark-mode .rbc-agenda-table tbody tr {
     background-color: var(--bs-card-bg);
-    /* Color base para las filas */
 }
-
 body.dark-mode .rbc-agenda-table tbody tr:nth-child(odd) {
     background-color: var(--bs-body-bg);
-    /* Color más oscuro para filas impares (ej. el mismo que el body) */
 }
-
 body.dark-mode .rbc-agenda-table tbody tr:nth-child(even) {
     background-color: var(--bs-gray-200);
-    /* Color ligeramente más claro para filas pares */
 }
-
-/* Color del texto de las celdas de la agenda para asegurar visibilidad */
 body.dark-mode .rbc-agenda-table td {
     color: var(--bs-body-color) !important;
-    /* Asegura texto blanco */
 }
-
-/* Borde de las celdas de la agenda */
 body.dark-mode .rbc-agenda-table th,
 body.dark-mode .rbc-agenda-table td {
     border-right-color: var(--bs-border-color) !important;
     border-bottom-color: var(--bs-border-color) !important;
 }
-
 body.dark-mode .rbc-agenda-table th {
     color: var(--bs-heading-color) !important;
-    /* Títulos de columna (Fecha, Hora, Evento) */
     background-color: var(--bs-light) !important;
-    /* Fondo del encabezado de la tabla */
 }
-
 body.dark-mode .rbc-agenda-time-cell {
     border-left-color: var(--bs-border-color) !important;
 }
 
+/* =====================
+    Tablas y Badges
+   ===================== */
+.table {
+    --bs-table-bg: var(--bs-card-bg);
+    --bs-table-color: var(--bs-card-color);
+    --bs-table-striped-bg: var(--bs-body-bg);
+    --bs-table-striped-color: var(--bs-card-color);
+    --bs-table-hover-bg: var(--bs-gray-200);
+    --bs-table-hover-color: var(--bs-card-color);
+    --bs-table-border-color: var(--bs-border-color);
+}
+.table thead {
+    background-color: var(--bs-light) !important;
+    color: var(--bs-heading-color) !important;
+}
+.table th,
+.table td {
+    border-color: var(--bs-border-color) !important;
+}
+.table .badge {
+    color: white !important;
+}
+.table .badge.bg-warning {
+    color: #212529 !important;
+}
+.table td:last-child { 
+    text-align: center; 
+    display: table-cell; 
+}
+.table td:last-child .badge {
+    display: inline-flex; 
+    justify-content: center; 
+    min-width: 100px; 
+    padding: .4em .6em; 
+}
+
+/* =====================
+    Autenticación
+   ===================== */
 body.dark-mode .auth-container {
     background-color: var(--bs-body-bg) !important;
 }
-
 body.dark-mode .auth-card {
     background-color: var(--bs-card-bg) !important;
     border-color: var(--bs-border-color) !important;
     color: var(--bs-card-color) !important;
 }
 
+/* =====================
+    Toastify
+   ===================== */
 body.dark-mode .Toastify__toast-theme--colored {
     background-color: var(--bs-card-bg) !important;
     color: var(--bs-card-color) !important;
 }
-
 body.dark-mode .Toastify__toast--success {
     background-color: #28a745 !important;
 }
-
 body.dark-mode .Toastify__toast--error {
     background-color: #dc3545 !important;
 }
-
 body.dark-mode .Toastify__toast--warning {
     background-color: #ffc107 !important;
     color: #212529 !important;
 }
-
 body.dark-mode .Toastify__toast--info {
     background-color: #17a2b8 !important;
 }
-
 body.dark-mode .Toastify__toast--default {
     background-color: var(--bs-card-bg) !important;
     color: var(--bs-card-color) !important;
 }
-
 .Toastify__progress-bar {
     opacity: 0.7;
 }
-
 body.dark-mode .Toastify__progress-bar--colored {
     background-color: var(--bs-primary) !important;
 }
-
-

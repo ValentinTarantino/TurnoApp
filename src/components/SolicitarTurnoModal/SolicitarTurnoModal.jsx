@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
+
+function validarMotivo(motivo) {
+    if (!motivo.trim()) {
+        return 'Por favor, describe el motivo de tu consulta.';
+    }
+    return null;
+}
 
 const SolicitarTurnoModal = ({ show, onHide, onSolicitar }) => {
     const [motivo, setMotivo] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!motivo.trim()) {
-            alert('Por favor, describe el motivo de tu consulta.');
+        const error = validarMotivo(motivo);
+        if (error) {
+            toast.error(error);
             return;
         }
         onSolicitar(motivo); // Llama a la función del padre con el motivo

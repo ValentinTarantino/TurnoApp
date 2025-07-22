@@ -6,6 +6,10 @@
 
 TurnosApp es una aplicación web moderna diseñada para facilitar la gestión de turnos para profesionales y sus clientes. Construida con React, ofrece una interfaz intuitiva y responsiva que permite a los profesionales organizar su agenda, y a los clientes solicitar y gestionar sus propios turnos.
 
+## Modo Profesional
+
+[**CLICKEA ACA**](https://drive.google.com/file/d/1QLaHC4JMPIFAcedvwYeP3HmuVizia46w/view?usp=sharing)
+
 ### Características Clave:
 
 *   **Autenticación de Usuarios:**  Inicio de sesión seguro a través de Google Authentication.
@@ -31,14 +35,16 @@ TurnosApp es una aplicación web moderna diseñada para facilitar la gestión de
 *   `React Router DOM`: Para la navegación y el enrutamiento dentro de la aplicación.
 *   `Bootstrap`: Framework CSS para un diseño responsivo y componentes de UI pre-estilizados.
 *   `React Toastify`: Para notificaciones "toast" personalizables.
-*   `React Big Calendar`: Componente de calendario interactivo para la gestión de agenda.
-*   `Moment.js`: Librería para el manejo y formato de fechas (utilizada por `react-big-calendar`).
 
 ---
 
 ## Project Description
 
 TurnosApp is a modern web application designed to facilitate appointment management for professionals and their clients. Built with React, it offers an intuitive and responsive interface that allows professionals to organize their schedule, and clients to request and manage their own appointments.
+
+## Professional Mode
+
+[**CLICK HERE**](https://drive.google.com/file/d/1QLaHC4JMPIFAcedvwYeP3HmuVizia46w/view?usp=sharing)
 
 ### Key Features:
 
@@ -65,5 +71,28 @@ TurnosApp is a modern web application designed to facilitate appointment managem
 *   `React Router DOM`: For navigation and routing within the application.
 *   `Bootstrap`: CSS framework for responsive design and pre-styled UI components.
 *   `React Toastify`: For customizable "toast" notifications.
-*   `React Big Calendar`: Interactive calendar component for schedule management.
-*   `Moment.js`: Library for date handling and formatting (used by `react-big-calendar`).
+
+
+---
+
+# Mejoras y Buenas Prácticas / Improvements and Best Practices
+
+## Español
+
+- Se reemplazaron los mensajes de alerta (`alert`) por notificaciones visuales usando `react-toastify` para una mejor experiencia de usuario.
+- Se extrajo la lógica de validación de formularios y modales a funciones utilitarias, separando la lógica de la presentación.
+- Se eliminaron logs de configuración sensibles en producción para mayor seguridad.
+- Se agregaron validaciones de propiedades (`PropTypes`) en componentes clave para evitar errores de uso.
+- Se unificaron y aclararon nombres de variables para mayor coherencia y mantenimiento.
+- Se mejoró la organización del código, agrupando funciones y estilos según su propósito.
+- Se centralizó el feedback de errores y validaciones para que el usuario siempre reciba información clara y consistente.
+
+## English
+
+- Alert messages (`alert`) were replaced with visual notifications using `react-toastify` for a better user experience.
+- Form and modal validation logic was extracted into utility functions, separating logic from presentation.
+- Sensitive configuration logs were removed from production for increased security.
+- Property validation (`PropTypes`) was added to key components to prevent usage errors.
+- Variable names were unified and clarified for greater consistency and maintainability.
+- Code organization was improved, grouping functions and styles by their purpose.
+- Error and validation feedback was centralized so users always receive clear and consistent information.

@@ -10,11 +10,8 @@ const LoginPage = () => {
 
     const handleGoogleSignIn = async () => {
         try {
-            // Abre la ventana emergente de Google para iniciar sesión
             await signInWithPopup(auth, provider);
             toast.success("¡Inicio de sesión exitoso!");
-            // GuestRoute se encargará de redirigirnos a la página de inicio
-            // pero podemos añadir una navegación explícita por si acaso.
             navigate('/');
         } catch (error) {
             toast.error("Error al iniciar sesión con Google.");

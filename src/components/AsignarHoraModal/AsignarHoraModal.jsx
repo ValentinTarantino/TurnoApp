@@ -1,49 +1,52 @@
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AsignarHoraModal = ({ show, onHide, onConfirm }) => {
     const [fecha, setFecha] = useState('');
     const [hora, setHora] = useState('');
-    const [duracion, setDuracion] = useState('30'); // Duración por defecto
+    const [duracion, setDuracion] = useState('30'); 
 
-    // --- LÓGICA PARA RESTRINGIR LA FECHA (CORREGIDO) ---
     const getTodayDate = () => {
         const today = new Date();
         const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Meses son 0-11
+        const month = String(today.getMonth() + 1).padStart(2, '0'); 
         const day = String(today.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`; // Formato YYYY-MM-DD
+        return `${year}-${month}-${day}`; 
     };
 
     const getLastDayOfCurrentYear = () => {
         const today = new Date();
         const year = today.getFullYear();
-        // Crea una fecha para el 31 de diciembre del año actual
         const lastDay = new Date(year, 11, 31);
         const month = String(lastDay.getMonth() + 1).padStart(2, '0');
         const day = String(lastDay.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`; // Formato YYYY-MM-DD
+        return `${year}-${month}-${day}`; 
     };
 
     const minDate = getTodayDate();
     const maxDate = getLastDayOfCurrentYear();
-    // --- FIN LÓGICA ---
+
+    function validarAsignacion({ fecha, hora, duracion, minDate, maxDate }) {
+        if (!fecha || !hora || !duracion) {
+            return 'Por favor, especifica la fecha, la hora y la duración.';
+        }
+        if (fecha < minDate || fecha > maxDate) {
+            return `Por favor, selecciona una fecha entre hoy (${minDate}) y fin de año (${maxDate}).`;
+        }
+        return null;
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!fecha || !hora || !duracion) {
-            alert('Por favor, especifica la fecha, la hora y la duración.');
+        const error = validarAsignacion({ fecha, hora, duracion, minDate, maxDate });
+        if (error) {
+            toast.error(error);
             return;
         }
-        // Opcional: Validación adicional (los atributos min/max ya la impiden en el navegador)
-        if (fecha < minDate || fecha > maxDate) {
-            alert(`Por favor, selecciona una fecha entre hoy (${minDate}) y fin de año (${maxDate}).`);
-            return;
-        }
-
         onConfirm({ fecha, hora, duracion: parseInt(duracion) });
         setFecha('');
         setHora('');
-        setDuracion('30'); // Resetea a 30
+        setDuracion('30'); 
         onHide();
     };
 
@@ -70,8 +73,8 @@ const AsignarHoraModal = ({ show, onHide, onConfirm }) => {
                                         id="fechaTurno"
                                         value={fecha}
                                         onChange={(e) => setFecha(e.target.value)}
-                                        min={minDate} // <-- AQUÍ SE APLICA LA RESTRICCIÓN MÍNIMA
-                                        max={maxDate} // <-- AQUÍ SE APLICA LA RESTRICCIÓN MÁXIMA
+                                        min={minDate} 
+                                        max={maxDate} 
                                         required
                                     />
                                 </div>

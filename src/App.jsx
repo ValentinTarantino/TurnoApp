@@ -32,7 +32,6 @@ function App() {
 
       <main className="container mt-4">
         <Routes>
-          {/* --- RUTA PARA INVITADOS (NO LOGUEADOS) --- */}
           <Route
             path="/login"
             element={
@@ -41,8 +40,6 @@ function App() {
               </GuestRoute>
             }
           />
-
-          {/* --- RUTAS PROTEGIDAS (PARA USUARIOS LOGUEADOS) --- */}
           <Route
             path="/"
             element={
@@ -75,8 +72,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          {/* --- RUTA DE ADMINISTRACIÓN (SOLO PARA ADMINS) --- */}
           <Route
             path="/admin"
             element={
@@ -85,8 +80,6 @@ function App() {
               </AdminRoute>
             }
           />
-
-          {/* Ruta "catch-all" para manejar páginas no encontradas (404) */}
           <Route path="*" element={
             <div className="text-center mt-5">
               <h1>404</h1>

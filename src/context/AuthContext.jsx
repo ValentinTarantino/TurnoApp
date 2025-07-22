@@ -1,22 +1,16 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { auth, db } from '../firebase/config';
+import { auth } from '../firebase/config'; 
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 import Loader from '../components/Loader/Loader';
 import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
-
-export const useAuth = () => {
-    return useContext(AuthContext);
-};
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
     const [userRole, setUserRole] = useState(null);
     const [loading, setLoading] = useState(true);
     const [theme, setTheme] = useState(() => {
-        // Leer el tema guardado de localStorage o usar 'light' por defecto
         const savedTheme = localStorage.getItem('app-theme');
         return savedTheme || 'light';
     });
@@ -24,27 +18,42 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         document.body.className = theme === 'dark' ? 'dark-mode' : '';
         localStorage.setItem('app-theme', theme);
-    }, [theme]); // Se ejecuta cada vez que 'theme' cambia
+    }, [theme]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const userDocRef = doc(db, 'users', user.uid);
-                const userDoc = await getDoc(userDocRef);
-
-                if (userDoc.exists()) {
-                    setCurrentUser(user);
-                    setUserRole(userDoc.data().role);
-                } else {
-                    const newUser = {
-                        email: user.email,
-                        nombre: user.displayName,
-                        role: 'cliente'
-                    };
-                    await setDoc(userDocRef, newUser);
-                    setCurrentUser(user);
-                    setUserRole('cliente');
-                    toast.info("¡Bienvenido! Tu cuenta ha sido creada.");
+                try {
+                    const response = await fetch(`http://localhost:5000/api/users/${user.uid}`);
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            const createUserResponse = await fetch('http://localhost:5000/api/users', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    id: user.uid,
+                                    email: user.email,
+                                    nombre: user.displayName,
+                                    role: 'cliente' 
+                                })
+                            });
+                            const newUser = await createUserResponse.json();
+                            setCurrentUser(user);
+                            setUserRole(newUser.role);
+                            toast.info("¡Bienvenido! Tu cuenta ha sido creada.");
+                        } else {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                    } else {
+                        const userData = await response.json();
+                        setCurrentUser(user);
+                        setUserRole(userData.role);
+                    }
+                } catch (error) {
+                    console.error("Error al obtener o crear usuario en el backend:", error);
+                    toast.error("Error al cargar datos de usuario.");
+                    setCurrentUser(null); 
+                    setUserRole(null);
                 }
             } else {
                 setCurrentUser(null);
@@ -52,10 +61,10 @@ export const AuthProvider = ({ children }) => {
             }
             setLoading(false);
         });
+
         return unsubscribe;
     }, []);
 
-    // Función para cambiar el tema
     const toggleTheme = () => {
         setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
     };
@@ -64,8 +73,8 @@ export const AuthProvider = ({ children }) => {
         currentUser,
         userRole,
         loading,
-        theme, // Exportar el tema
-        toggleTheme, // Exportar la función para cambiar el tema
+        theme,
+        toggleTheme,
     };
 
     return (

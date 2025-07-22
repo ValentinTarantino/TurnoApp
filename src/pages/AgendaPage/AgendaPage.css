@@ -1,27 +1,11 @@
-.rbc-event {
-    border-radius: 5px !important;
-    font-size: 0.9rem !important;
-    padding: 3px 5px !important;
-    text-align: left !important;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+th:nth-child(6),
+td:nth-child(6) {
+    text-align: center;
+    vertical-align: middle;
 }
 
-.rbc-event-content {
-    white-space: normal;/
-}
-
-.rbc-event.event-confirmed {
-    background-color: #28a745 !important;
-    color: white !important;
-    border-color: #28a745 !important;
-}
-
-.rbc-event.event-pending {
-    background-color: #ffc107 !important;
-    color: #343a40 !important;
-    border-color: #ffc107 !important;
-}
-
-.rbc-header {
-    font-weight: bold;
+.badge {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
 }
