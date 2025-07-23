@@ -30,8 +30,7 @@ TurnosApp es una aplicación web moderna diseñada para facilitar la gestión de
 
 *   `React`: La librería principal para construir la interfaz de usuario.
 *   `Vite`: Herramienta de compilación rápida para proyectos React.
-*   `Firebase`: Plataforma backend-as-a-service para:
-*   `Authentication`: Gestión de usuarios y sesiones (Google Sign-In).
+*   `PostgreSQL`: Gestión de usuarios y sesiones (Google Sign-In).
 *   `React Router DOM`: Para la navegación y el enrutamiento dentro de la aplicación.
 *   `Bootstrap`: Framework CSS para un diseño responsivo y componentes de UI pre-estilizados.
 *   `React Toastify`: Para notificaciones "toast" personalizables.
@@ -66,8 +65,7 @@ TurnosApp is a modern web application designed to facilitate appointment managem
 
 *   `React`: The primary library for building the user interface.
 *   `Vite`: Fast build tool for React projects.
-*   `Firebase`: Backend-as-a-service platform for:
-*   `Authentication`: User and session management (Google Sign-In).
+*   `PostgreSQL`: User and session management (Google Sign-In).
 *   `React Router DOM`: For navigation and routing within the application.
 *   `Bootstrap`: CSS framework for responsive design and pre-styled UI components.
 *   `React Toastify`: For customizable "toast" notifications.

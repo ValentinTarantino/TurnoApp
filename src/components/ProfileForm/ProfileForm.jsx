@@ -2,7 +2,6 @@ import  { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const ProfileForm = ({ user, onSave }) => {
-    // Inicializamos el estado del formulario con los datos existentes del usuario
     const [formData, setFormData] = useState({
         especialidad: user.especialidad || '',
         horarios: user.horarios || '',
@@ -15,7 +14,7 @@ const ProfileForm = ({ user, onSave }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(formData); // Llama a la función del padre para guardar los datos
+        onSave(formData);
     };
 
     return (

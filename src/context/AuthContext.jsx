@@ -1,10 +1,11 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { auth } from '../firebase/config';
-import { onAuthStateChanged } from 'firebase/auth';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../firebase/config';
 import Loader from '../components/Loader/Loader';
 import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
+
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
@@ -20,59 +21,82 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('app-theme', theme);
     }, [theme]);
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/${user.uid}`);
-                    if (!response.ok) {
-                        if (response.status === 404) {
-                            const createUserResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    id: user.uid,
-                                    email: user.email,
-                                    nombre: user.displayName,
-                                    role: 'cliente'
-                                })
-                            });
-                            const newUser = await createUserResponse.json();
-                            setCurrentUser(user);
-                            setUserRole(newUser.role);
-                            toast.info("¡Bienvenido! Tu cuenta ha sido creada.");
-                        } else {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                    } else {
-                        const userData = await response.json();
-                        setCurrentUser(user);
-                        setUserRole(userData.role);
-                    }
-                } catch (error) {
-                    console.error("Error al obtener o crear usuario en el backend:", error);
-                    toast.error("Error al cargar datos de usuario.");
-                    setCurrentUser(null);
-                    setUserRole(null);
-                }
-            } else {
-                setCurrentUser(null);
-                setUserRole(null);
-            }
-            setLoading(false);
-        });
-
-        return unsubscribe;
-    }, []);
-
     const toggleTheme = () => {
         setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    };
+
+    useEffect(() => {
+        let ignore = false;
+
+        const getSessionAndProfile = async () => {
+            setLoading(true);
+            const { data: { session } } = await supabase.auth.getSession();
+            const user = session?.user || null;
+            setCurrentUser(user);
+
+            if (user) {
+                let { data: profiles, error } = await supabase
+                    .from('users')
+                    .select('role, foto_url')
+                    .eq('id', user.id);
+
+                const profile = profiles && profiles.length > 0 ? profiles[0] : null;
+
+                if (!profile) {
+                    await supabase
+                        .from('users')
+                        .insert([{
+                            id: user.id,
+                            email: user.email,
+                            nombre: user.user_metadata.full_name || user.user_metadata.name || user.email,
+                            role: 'cliente',
+                            foto_url: user.user_metadata.avatar_url || user.user_metadata.picture || null
+                        }]);
+                    setUserRole('cliente');
+                } else {
+                    setUserRole(profile.role);
+                    if (!profile.foto_url && (user.user_metadata.avatar_url || user.user_metadata.picture)) {
+                        await supabase
+                            .from('users')
+                            .update({ foto_url: user.user_metadata.avatar_url || user.user_metadata.picture })
+                            .eq('id', user.id);
+                    }
+                }
+            } else {
+                setUserRole(null);
+                setCurrentUser(null);
+            }
+            setLoading(false);
+        };
+
+        getSessionAndProfile();
+
+        // Listener para cambios de sesión
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (ignore) return;
+            setCurrentUser(session?.user || null);
+            getSessionAndProfile();
+        });
+
+        return () => {
+            ignore = true;
+            if (subscription) subscription.unsubscribe();
+        };
+    }, []);
+
+    // Logout robusto
+    const logout = async () => {
+        await supabase.auth.signOut();
+        setCurrentUser(null);
+        setUserRole(null);
+        toast.info('Sesión cerrada');
     };
 
     const value = {
         currentUser,
         userRole,
         loading,
+        logout,
         theme,
         toggleTheme,
     };

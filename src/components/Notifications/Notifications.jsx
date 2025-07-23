@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/useAuth';
+import { supabase } from '../../firebase/config';
 import './Notifications.css';
 import moment from 'moment'; 
 
@@ -7,6 +8,7 @@ const Notifications = () => {
     const { currentUser } = useAuth();
     const [notifications, setNotifications] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const intervalRef = useRef(null);
 
     const fetchNotifications = async () => {
         if (!currentUser) {
@@ -14,39 +16,60 @@ const Notifications = () => {
             return;
         }
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notifications/${currentUser.uid}`);
-            if (!response.ok) throw new Error('Error al cargar notificaciones desde el backend');
-            const data = await response.json();
-            setNotifications(data);
+            const { data, error } = await supabase
+                .from('notifications')
+                .select('*')
+                .eq('user_id', currentUser.id);
+            if (error) throw error;
+            setNotifications(data || []);
         } catch (error) {
             console.error("Error al cargar notificaciones:", error);
         }
     };
 
+    // Solo refresca si la campana está cerrada
+    const startInterval = () => {
+        if (intervalRef.current) clearInterval(intervalRef.current);
+        intervalRef.current = setInterval(() => {
+            if (!isOpen) fetchNotifications();
+        }, 10000);
+    };
+
     useEffect(() => {
-        fetchNotifications();
-        const intervalId = setInterval(fetchNotifications, 10000); 
-        return () => clearInterval(intervalId);
+        if (currentUser) {
+            fetchNotifications();
+            startInterval();
+        }
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
     }, [currentUser]);
 
     const handleToggle = async () => {
         const nextIsOpen = !isOpen;
-        setIsOpen(nextIsOpen);
 
-        if (nextIsOpen && notifications.filter(n => !n.leida).length > 0) {
-            const unreadNotis = notifications.filter(n => !n.leida);
-            for (const noti of unreadNotis) {
-                try {
-                    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/notifications/${noti.id}/read`, {
-                        method: 'PUT',
-                    });
-                    if (!response.ok) throw new Error('Error al marcar como leída en backend');
-                } catch (error) {
-                    console.error(`Error marcando notificación ${noti.id} como leída:`, error);
+        if (nextIsOpen) {
+            if (intervalRef.current) clearInterval(intervalRef.current); // Detener refresco automático
+            const unreadIds = notifications.filter(n => !n.leida).map(n => n.id);
+            if (unreadIds.length > 0) {
+                // LOG para ver los ids que se intentan actualizar
+                console.log('Intentando marcar como leídas:', unreadIds);
+                const { data, error } = await supabase
+                    .from('notifications')
+                    .update({ leida: true })
+                    .in('id', unreadIds);
+                if (error) {
+                    console.error('Error actualizando notificaciones:', error);
+                } else {
+                    console.log('Resultado update:', data);
                 }
+                await fetchNotifications();
             }
-            setNotifications(prevNotis => prevNotis.map(noti => ({ ...noti, leida: true })));
+        } else {
+            startInterval(); // Reanudar refresco automático al cerrar la campana
+            fetchNotifications(); // Refresca al cerrar para traer nuevas notis si hay
         }
+        setIsOpen(nextIsOpen);
     };
 
     const unreadCount = notifications.filter(n => !n.leida).length;

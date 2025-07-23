@@ -1,21 +1,16 @@
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import React from 'react';
+import { supabase } from '../../firebase/config';
 import './LoginPage.css';
-import { auth } from '../../firebase/config';
-import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
-    const navigate = useNavigate();
-    const provider = new GoogleAuthProvider();
-
     const handleGoogleSignIn = async () => {
-        try {
-            await signInWithPopup(auth, provider);
-            toast.success("¡Inicio de sesión exitoso!");
-            navigate('/');
-        } catch (error) {
-            toast.error("Error al iniciar sesión con Google.");
-            console.error("Error en Google Sign-In: ", error);
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+        });
+        if (error) {
+            console.error('Error al iniciar sesión con Google:', error);
+            toast.error("Hubo un error al intentar iniciar sesión con Google.");
         }
     };
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/useAuth';
+import { supabase } from '../../firebase/config';
 import Loader from '../../components/Loader/Loader';
 import ProfileForm from '../../components/ProfileForm/ProfileForm';
 import { toast } from 'react-toastify';
@@ -18,9 +19,12 @@ const PerfilPage = () => {
 
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/users/${currentUser.uid}`);
-                if (!response.ok) throw new Error('Error al cargar datos de usuario desde el backend');
-                const data = await response.json();
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                if (error) throw error;
                 setUserData(data);
             } catch (error) {
                 console.error("Error al cargar datos de usuario:", error);
@@ -30,10 +34,12 @@ const PerfilPage = () => {
 
         const fetchHistorial = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/turnos?paciente_id=${currentUser.uid}`);
-                if (!response.ok) throw new Error('Error al cargar historial de turnos desde el backend');
-                const data = await response.json();
-                setHistorialTurnos(data);
+                const { data, error } = await supabase
+                    .from('turnos')
+                    .select('*')
+                    .eq('paciente_id', currentUser.id);
+                if (error) throw error;
+                setHistorialTurnos(data || []);
             } catch (error) {
                 console.error("Error al cargar historial de turnos:", error);
                 toast.error("Error al cargar tu historial de turnos.");
@@ -54,16 +60,17 @@ const PerfilPage = () => {
 
     const handleSaveProfile = async (formData) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/users/${currentUser.uid}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-            if (!response.ok) throw new Error('Error al actualizar perfil en el backend');
-            const updatedData = await response.json();
-            setUserData(updatedData);
-            setIsEditing(false);
+            const { error } = await supabase
+                .from('users')
+                .update({
+                    especialidad: formData.especialidad,
+                    horarios: formData.horarios,
+                })
+                .eq('id', currentUser.id);
+            if (error) throw error;
             toast.success("Perfil actualizado con éxito.");
+            setUserData({ ...userData, ...formData });
+            setIsEditing(false);
         } catch (error) {
             console.error("Error al actualizar el perfil:", error);
             toast.error("Error al actualizar el perfil.");
@@ -93,13 +100,21 @@ const PerfilPage = () => {
                         </div>
                         <div className="card-body">
                             <div className="text-center mb-4">
-                                <img
-                                    src={currentUser.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || currentUser.email)}&background=random&color=fff&size=150`}
-                                    alt={`Foto de perfil de ${currentUser.displayName || currentUser.email}`}
-                                    className="rounded-circle"
-                                    style={{ width: '150px', height: '150px', objectFit: 'cover', border: '4px solid #fff' }}
-                                    onError={(e) => { e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || currentUser.email)}&background=random&color=fff&size=150`; e.target.alt = "Avatar de usuario"; }}
-                                />
+                                {userData.foto_url ? (
+                                    <img
+                                        src={userData.foto_url}
+                                        alt={`Foto de perfil de ${currentUser.displayName || currentUser.email}`}
+                                        className="rounded-circle"
+                                        style={{ width: '150px', height: '150px', objectFit: 'cover', border: '4px solid #fff' }}
+                                    />
+                                ) : (
+                                    <img
+                                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || currentUser.email)}&background=random&color=fff&size=150`}
+                                        alt="Avatar de usuario"
+                                        className="rounded-circle"
+                                        style={{ width: '150px', height: '150px', objectFit: 'cover', border: '4px solid #fff' }}
+                                    />
+                                )}
                             </div>
 
                             <ul className="list-group list-group-flush mb-4">

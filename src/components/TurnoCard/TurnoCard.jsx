@@ -1,7 +1,7 @@
 import './TurnoCard.css';
 import moment from 'moment';
 
-const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, onAsignarHora, onClienteCancela }) => {
+const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, onAsignarHora = () => { }, onClienteCancela, showEliminar = false }) => {
     const { id, paciente_nombre, fecha, hora, motivo, estado, duracion } = turno;
 
     const getBadgeClass = (estado) => {
@@ -18,15 +18,30 @@ const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, on
                 return 'bg-secondary';
         }
     };
+
+    const getNombreCuenta = (email) => {
+        if (!email) return '';
+        return email.split('@')[0];
+    };
     return (
         <div className="card shadow-sm mb-3 turno-card">
             <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center">
-                    <h5 className="card-title mb-0">{paciente_nombre}</h5>
+                    <div className="d-flex align-items-center">
+                        {turno.fotoPerfil && (
+                            <img
+                                src={turno.fotoPerfil}
+                                alt="Foto de perfil"
+                                className="rounded-circle me-2"
+                                style={{ width: 40, height: 40, objectFit: 'cover', border: '2px solid #fff' }}
+                            />
+                        )}
+                        <h5 className="card-title mb-0">{getNombreCuenta(paciente_nombre)}</h5>
+                    </div>
                     <span className={`badge ${getBadgeClass(estado)}`}>{estado}</span>
                 </div>
                 <p className="card-text text-muted mt-2">
-                    <strong>Fecha:</strong> 
+                    <strong>Fecha:</strong>
                     {fecha ? moment(fecha).format('DD/MM/YYYY') : 'Por confirmar'}
                     <br />
                     <strong>Hora:</strong> {hora}
@@ -79,18 +94,19 @@ const TurnoCard = ({ turno, userRole, onActualizarEstado, onShowConfirmModal, on
                         )}
                     </div>
                 )}
+
                 {userRole === 'cliente' && estado.toLowerCase() !== 'cancelado' && estado.toLowerCase() !== 'solicitado' && (
                     <div className="d-flex justify-content-end gap-2 mt-3">
                         <button
                             className="btn btn-danger btn-sm"
-                            onClick={() => onClienteCancela(id)}
+                            onClick={() => onActualizarEstado(id, 'Cancelado')}
                         >
                             Cancelar Turno
                         </button>
                     </div>
                 )}
             </div>
-        </div >
+        </div>
     );
 };
 

@@ -3,6 +3,7 @@ import moment from 'moment';
 import 'moment/dist/locale/es'; 
 import './AgendaPage.css'; 
 import { useAuth } from '../../context/useAuth';
+import { supabase } from '../../firebase/config';
 import Loader from '../../components/Loader/Loader';
 import { toast } from 'react-toastify';
 
@@ -22,23 +23,18 @@ const AgendaPage = () => {
         const fetchTurnosForAgenda = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://localhost:5000/api/turnos');
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error("AgendaPage: Error HTTP al cargar turnos:", response.status, errorText);
-                    throw new Error(`Error al cargar turnos: ${response.status} ${response.statusText}`);
-                }
-                const loadedTurnos = await response.json();
-                const agendaTurnos = loadedTurnos
+                const { data, error } = await supabase
+                    .from('turnos')
+                    .select('*');
+                if (error) throw error;
+                const agendaTurnos = data
                     .filter(turno => turno.fecha && turno.hora && turno.estado !== 'solicitado' && turno.estado !== 'Cancelado')
                     .sort((a, b) => {
                         const dateA = moment(`${a.fecha} ${a.hora}`, 'YYYY-MM-DD HH:mm');
                         const dateB = moment(`${b.fecha} ${b.hora}`, 'YYYY-MM-DD HH:mm');
                         return dateA.diff(dateB);
                     });
-
                 setTurnos(agendaTurnos);
-
             } catch (error) {
                 console.error("AgendaPage: Error general al cargar la agenda:", error);
                 toast.error("Error al cargar la agenda.");

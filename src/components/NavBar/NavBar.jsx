@@ -1,8 +1,8 @@
+import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './NavBar.css';
 import { useAuth } from '../../context/useAuth';
-import { auth } from '../../firebase/config';
-import { signOut } from 'firebase/auth';
+import { supabase } from '../../firebase/config';
 import { toast } from 'react-toastify';
 import Notifications from '../Notifications/Notifications';
 
@@ -12,10 +12,12 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            await signOut(auth);
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
             toast.info("Has cerrado sesión.");
             navigate('/login');
         } catch (error) {
+            console.error("Error al cerrar sesión:", error);
             toast.error("Error al cerrar sesión.");
         }
     };
@@ -26,16 +28,16 @@ const Navbar = () => {
                 <Link className="navbar-brand" to="/">
                     TurnosApp
                 </Link>
-                <div className="d-flex align-items-center d-lg-none ms-auto"> 
+
+                <div className="d-flex align-items-center d-lg-none ms-auto">
                     <button
-                        className="btn btn-link nav-link me-2 p-0" 
+                        className="btn btn-link nav-link me-2 p-0"
                         onClick={toggleTheme}
                         title="Cambiar tema"
                     >
-                        <i className={`bi ${theme === 'light' ? 'bi-moon-fill' : 'bi-sun-fill'} fs-5 text-white`}></i> 
+                        <i className={`bi ${theme === 'light' ? 'bi-moon-fill' : 'bi-sun-fill'} fs-5 text-white`}></i>
                     </button>
 
-                    {/* Toggler del Navbar */}
                     <button
                         className="navbar-toggler"
                         type="button"
@@ -60,7 +62,7 @@ const Navbar = () => {
                             </li>
                             <li className="nav-item">
                                 <span className="navbar-text me-3">
-                                    Hola, {currentUser.displayName || currentUser.email}
+                                    Hola, {currentUser.user_metadata.full_name || currentUser.email}
                                 </span>
                             </li>
                             <li className="nav-item">
@@ -88,7 +90,6 @@ const Navbar = () => {
                         </ul>
                     ) : (
                         <ul className="navbar-nav ms-auto">
-                            {/* Toggle de tema para pantallas grandes (no logueado) */}
                             <li className="nav-item me-3 d-none d-lg-block">
                                 <button
                                     className="btn btn-link nav-link"
