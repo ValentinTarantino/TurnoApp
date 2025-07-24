@@ -86,54 +86,51 @@ const PerfilPage = () => {
     const capitalize = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
 
     return (
-        <div className="container mt-4">
+        <div className="container py-3">
+            <div className="d-flex justify-content-end mb-3">
+                <button className="btn btn-outline-primary btn-sm" onClick={() => window.location.href = '/logout'}>
+                    Cerrar Sesión
+                </button>
+            </div>
             <div className="row justify-content-center">
-                <div className="col-md-8">
+                <div className="col-12 col-md-8 col-lg-6">
                     <div className="card shadow-sm">
-                        <div className="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                            <h2>Mi Perfil</h2>
-                            {(userRole === 'profesional' || userRole === 'administrador') && !isEditing && (
-                                <button className="btn btn-light btn-sm" onClick={() => setIsEditing(true)}>
-                                    Editar Perfil
-                                </button>
-                            )}
+                        <div className="card-header bg-primary text-white text-center">
+                            <h2 className="mb-0">Mi Perfil</h2>
                         </div>
                         <div className="card-body">
-                            <div className="text-center mb-4">
+                            <div className="text-center mb-3">
                                 {userData.foto_url ? (
                                     <img
                                         src={userData.foto_url}
                                         alt={`Foto de perfil de ${currentUser.displayName || currentUser.email}`}
-                                        className="rounded-circle"
-                                        style={{ width: '150px', height: '150px', objectFit: 'cover', border: '4px solid #fff' }}
+                                        className="rounded-circle border border-3 border-white"
+                                        style={{ width: '90px', height: '90px', objectFit: 'cover' }}
                                     />
                                 ) : (
                                     <img
-                                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || currentUser.email)}&background=random&color=fff&size=150`}
+                                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || currentUser.email)}&background=random&color=fff&size=90`}
                                         alt="Avatar de usuario"
-                                        className="rounded-circle"
-                                        style={{ width: '150px', height: '150px', objectFit: 'cover', border: '4px solid #fff' }}
+                                        className="rounded-circle border border-3 border-white"
+                                        style={{ width: '90px', height: '90px', objectFit: 'cover' }}
                                     />
                                 )}
                             </div>
-
-                            <ul className="list-group list-group-flush mb-4">
-                                <li className="list-group-item d-flex justify-content-between align-items-center">
+                            <ul className="list-group list-group-flush mb-3">
+                                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                     <strong>Nombre:</strong>
-                                    <span>{currentUser.displayName || userData.nombre || currentUser.email}</span>
+                                    <span className="text-break">{currentUser.displayName || userData.nombre || currentUser.email}</span>
                                 </li>
-                                <li className="list-group-item d-flex justify-content-between align-items-center">
+                                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                     <strong>Correo Electrónico:</strong>
-                                    <span>{currentUser.email}</span>
+                                    <span className="text-break">{currentUser.email}</span>
                                 </li>
-                                <li className="list-group-item d-flex justify-content-between align-items-center">
+                                <li className="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                     <strong>Rol:</strong>
                                     <span className="badge bg-success fs-6">{capitalize(userRole)}</span>
                                 </li>
                             </ul>
-
                             <hr />
-
                             {(userRole === 'profesional' || userRole === 'administrador') && (
                                 <div className="mt-4">
                                     <h4>Información Profesional</h4>
@@ -156,7 +153,6 @@ const PerfilPage = () => {
                                     )}
                                 </div>
                             )}
-
                             {userRole === 'cliente' && (
                                 <div className="mt-4">
                                     <h4>Historial de Turnos</h4>
@@ -164,7 +160,7 @@ const PerfilPage = () => {
                                         {historialTurnos.length > 0 ? (
                                             historialTurnos.map(turno => (
                                                 <div key={turno.id} className="list-group-item list-group-item-action flex-column align-items-start">
-                                                    <div className="d-flex w-100 justify-content-between">
+                                                    <div className="d-flex w-100 justify-content-between flex-wrap">
                                                         <h5 className="mb-1">{turno.motivo}</h5>
                                                         <small className="text-muted">{turno.fecha ? moment(turno.fecha).format('DD/MM/YYYY') : 'Sin fecha'}</small>
                                                     </div>

@@ -5,12 +5,28 @@ import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const handleGoogleSignIn = async () => {
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-        });
-        if (error) {
-            console.error('Error al iniciar sesión con Google:', error);
-            toast.error("Hubo un error al intentar iniciar sesión con Google.");
+        try {
+            console.log('Inicio de sesión con Google');
+            console.log('Origen actual:', window.location.origin);
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin,
+                    scopes: 'email profile'
+                }
+            });
+            if (error) {
+                console.error('Error detallado:', error);
+                console.error('Código de error:', error.code);
+                console.error('Mensaje de error:', error.message);
+                toast.error(`Error de inicio de sesión: ${error.message}`);
+            }
+            if (data) {
+                console.log('Datos de sesión:', data);
+            }
+        } catch (catchError) {
+            console.error('Error capturado:', catchError);
+            toast.error('Error inesperado en el inicio de sesión');
         }
     };
 
