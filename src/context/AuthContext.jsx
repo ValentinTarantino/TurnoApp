@@ -84,12 +84,18 @@ export const AuthProvider = ({ children }) => {
         };
     }, []);
 
-    // Logout robusto
+    // Logout robusto (maneja errores si la sesión ya expiró)
     const logout = async () => {
-        await supabase.auth.signOut();
-        setCurrentUser(null);
-        setUserRole(null);
-        toast.info('Sesión cerrada');
+        try {
+            await supabase.auth.signOut();
+        } catch (error) {
+            console.error('Error al cerrar sesión en Supabase:', error.message);
+        } finally {
+            // Siempre limpiamos el estado local, falle o no el servidor
+            setCurrentUser(null);
+            setUserRole(null);
+            toast.info('Sesión cerrada correctamente');
+        }
     };
 
     const value = {
