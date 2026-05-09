@@ -1,0 +1,128 @@
+.auth-page-wrapper {
+    min-height: calc(100vh - 56px);
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    background-image: radial-gradient(rgba(0, 0, 0, 0.4) 1.5px, transparent 1.5px); /* Puntos más visibles */
+    background-size: 32px 32px;
+    position: relative;
+    z-index: 1;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.auth-card {
+    background: #ffffff;
+    border-radius: 32px;
+    border: 2px solid #000000;
+    padding: 3.5rem 2.5rem;
+    box-shadow: 12px 12px 0px 0px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.auth-logo {
+    width: 72px;
+    height: 72px;
+    background: #000000;
+    color: white;
+    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    margin: 0 auto 1.5rem;
+}
+
+.auth-header h2 {
+    font-weight: 900;
+    color: #000000;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.auth-header p {
+    color: #000000;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 2.5rem;
+    opacity: 0.8;
+}
+
+.google-login-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: white;
+    border: 2px solid #000000;
+    color: #000000;
+    padding: 16px 24px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+.google-login-btn:hover {
+    background: #000000;
+    color: white;
+}
+
+.auth-footer {
+    margin-top: 2.5rem;
+}
+
+.auth-footer small {
+    color: #000000;
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0.6;
+}
+
+/* MODO OSCURO SIN BORDES NI ESPACIOS GRISES */
+body.dark-mode .auth-page-wrapper {
+    background-color: #000000; /* Negro total */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px); /* Puntos blancos más claros */
+}
+
+body.dark-mode .auth-card {
+    background: #121212;
+    border: none; /* Sin borde claro */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .auth-header h2,
+body.dark-mode .auth-header p,
+body.dark-mode .auth-footer small {
+    color: #ffffff;
+}
+
+body.dark-mode .auth-logo {
+    background: #ffffff;
+    color: #000000;
+}
+
+body.dark-mode .google-login-btn {
+    background: #121212;
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+body.dark-mode .google-login-btn:hover {
+    background: #ffffff;
+    color: #000000;
+}

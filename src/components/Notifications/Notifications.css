@@ -1,0 +1,124 @@
+.notifications-dropdown-custom {
+    position: absolute;
+    top: 100%;
+    right: 0; /* Anclado a la derecha */
+    left: auto;
+    width: 340px;
+    max-height: 450px;
+    padding: 0;
+    overflow: hidden;
+    background-color: #fff;
+    color: #212529;
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.25);
+    border: none;
+    border-radius: 12px;
+    z-index: 1000;
+    display: none;
+    margin-top: 10px;
+}
+
+.notifications-dropdown-custom.show {
+    display: block;
+}
+
+/* Responsividad para móviles */
+@media (max-width: 576px) {
+    .notifications-dropdown-custom {
+        position: fixed !important;
+        top: 60px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: calc(100% - 20px) !important;
+        max-height: calc(100vh - 80px);
+        margin-top: 0;
+    }
+}
+
+/* Contenedor de la lista para el scroll */
+.notifications-list {
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+/* Estilos para cada item de la notificación */
+.notification-item {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: background-color 0.2s ease-in-out;
+    color: #212529;
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-item:hover {
+    background-color: #f8f9fa;
+}
+
+/* Estilos para las notificaciones no leídas (unread) */
+.notification-item.unread {
+    background-color: #f0f7ff;
+    border-left: 4px solid #0d6efd;
+    font-weight: 500;
+}
+
+.notification-item.unread .text-muted {
+    font-weight: normal;
+}
+
+/* El texto principal y secundario dentro de los ítems */
+.notification-item p {
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #212529;
+}
+
+.notification-item small.text-muted {
+    font-size: 0.8rem;
+    color: #6c757d !important;
+}
+
+/* Encabezado del dropdown */
+.dropdown-header {
+    font-weight: 700;
+    background-color: #fff;
+    padding: 1rem 1.25rem;
+    color: #212529;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Mensaje "No tienes notificaciones." */
+.no-notifications-text {
+    padding: 2rem 1rem;
+    color: #6c757d !important;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+/* Estilos para el botón de la campana en el Navbar */
+.btn-link.nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-link.nav-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+    border: 2px solid #0d6efd; /* Color del Navbar */
+}

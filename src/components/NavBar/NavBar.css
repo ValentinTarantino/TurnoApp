@@ -1,0 +1,11 @@
+/* El componente Notifications tiene sus propios estilos en Notifications.css */
+
+
+.btn-link.nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s ease;
+}
+
+.btn-link.nav-link:hover {
+    color: #fff;/
+}

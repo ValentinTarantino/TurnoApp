@@ -1,0 +1,26 @@
+.card-title {
+    color: #333;
+    font-weight: 600;
+}
+
+.turno-card .card-body {
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.turno-card .badge {
+    transition: all 0.3s ease;
+    padding: 0.5em 0.8em;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0; /* Evita que el badge se achique */
+}
+
+/* Ajuste fino para móviles muy pequeños */
+@media (max-width: 380px) {
+    .card-title {
+        max-width: 120px !important;
+    }
+}
